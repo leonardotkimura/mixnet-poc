@@ -1,0 +1,5 @@
+attach("el-gamal.sage")
+attach("hash.sage")
+attach("shuffle.sage")
+attach("verify.sage")
+attach("test.sage")
