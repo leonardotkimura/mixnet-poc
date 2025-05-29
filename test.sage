@@ -36,7 +36,7 @@ for i in range(N):
 
 shuffle = Shuffle(group, p, q, g, h_list, elgamal.pk)
 (ciphertext_list_2, random_list, phi) = shuffle.genShuffle(ciphertext_list_1, elgamal.pk)
-proof, dbg = shuffle.genProof(ciphertext_list_1, ciphertext_list_2, random_list, phi)
+proof = shuffle.genProof(ciphertext_list_1, ciphertext_list_2, random_list, phi)
 
 print(f"Ciphertext1: {ciphertext_list_1}")
 print(f"Ciphertext2: {ciphertext_list_2}")
@@ -45,5 +45,5 @@ print(f"Permutation: {phi}")
 print(f"Proof: {proof}")
 
 verifier = Verifier(p, q, g, h_list)
-result, debug = verifier.verifyProof(proof, ciphertext_list_1, ciphertext_list_2, elgamal.pk, dbg)
+result= verifier.verifyProof(proof, ciphertext_list_1, ciphertext_list_2, elgamal.pk)
 
