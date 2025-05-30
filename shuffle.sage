@@ -16,12 +16,10 @@ class Shuffle:
         random_list = []
         for c in entry_list:
             r = IntegerModRing(self.q).random_element()
-            # r = IntegerModRing(self.q)(0)
             a = c[0]*pk**r
             b = c[1]*self.g**r
             reencrypted_list.append((a, b))
             random_list.append(r)
-        print(f"Reencrypted list: {reencrypted_list}")
         shuffled_list = [reencrypted_list[i] for i in phi]
         return (shuffled_list, random_list, phi)
 
@@ -109,11 +107,7 @@ class Shuffle:
         s = (s0, s1, s2, s3, s_hat_list, s_prime_list)
         proof = (t, s, c_list, c_hat_list)
 
-        dbg = {}
-        dbg['r_prime'] = r_prime
-        dbg['u_prime_list'] = u_prime_list
-        dbg['r_prime_list'] = r_prime_list
-        return proof, dbg
+        return proof
 
     def genCommitment(self, phi):
         r_list = np.empty(len(phi), dtype=object)

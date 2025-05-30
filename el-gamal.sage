@@ -9,19 +9,16 @@ class ElGamal:
         
     
     def keygen(self):
-        """Generate a key pair (public key, secret key)."""
         self.sk = IntegerModRing(self.q).random_element()
         self.pk = self.g ** self.sk
 
     def encrypt(self, m):
-        """Encrypt message m with random r."""
         r = IntegerModRing(self.q).random_element()
         c1 = m * (self.pk ** r)
         c2 = self.g ** r
         return (c1, c2)
 
     def decrypt(self, ciphertext):
-        """Decrypt ciphertext."""
         c1, c2 = ciphertext
         return c2 / (c1 ** self.sk)  # Assuming sk is the secret key of the group
     
