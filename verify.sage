@@ -10,7 +10,7 @@ class Verifier:
 
         pass
 
-    def verifyProof(self, proof, entry_list, out_list, pk):
+    def verifyProof(self, proof, entry_list, out_list, pk, dbg):
         N = len(entry_list)
         (t, s, c_list, c_hat_list) = proof
         s_hat_list = s[4]
@@ -25,7 +25,7 @@ class Verifier:
 
         c_bar = prod(c_list) * prod(self.h_list).inverse() % self.p
         u = prod(u_list) % self.q
-        c_hat = (c_hat_list[N-1]  * (c_list[0] ** u).inverse()) % self.p
+        c_hat = (c_hat_list[N-1]  * (self.h_list[0] ** u).inverse()) % self.p
         c_tilde = prod(c_list[i] ** u_list[i] for i in range(N)) % self.p
         a_prime = prod(entry_list[i][0] ** u_list[i] for i in range(N)) % self.p
         b_prime = prod(entry_list[i][1] ** u_list[i] for i in range(N)) % self.p
@@ -40,9 +40,19 @@ class Verifier:
         t_prime_3_0 = ((a_prime ** challenge).inverse() * (pk ** s[3]).inverse()) * prod(out_list[i][0] ** s_prime_list[i] for i in range(N)) % self.p
         t_prime_3_1 = ((b_prime ** challenge).inverse() * (self.g ** s[3]).inverse()) * prod(out_list[i][1] ** s_prime_list[i] for i in range(N)) % self.p        
 
+
+        aux1 = (b_prime ** challenge).inverse() * prod(out_list[i][1] ** s_prime_list[i] for i in range(N))
+        aux2 = sum(dbg['r_prime_list'][i] * dbg['u_prime_list'][i] for i in range(N)) % self.q
+        
+        print(f"aux1: {aux1}")
+        print(f"aux2: {aux2}")
+        print(f"r_prime: {dbg['r_prime']}")
+        print(f"u_prime_list: {dbg['u_prime_list']}")
+        print(f"u_list: {u_list}")
+
         t_hat_prime_list = []
         for i in range(N):
-            prev_c_hat = c_hat if i == 0 else c_hat_list[i-1]
+            prev_c_hat = self.h_list[0] if i == 0 else c_hat_list[i-1]
             t_hat_prime = ((c_hat_list[i] ** challenge).inverse() * (self.g ** s_hat_list[i]) * (prev_c_hat ** s_prime_list[i])) % self.p
             t_hat_prime_list.append(t_hat_prime)
         

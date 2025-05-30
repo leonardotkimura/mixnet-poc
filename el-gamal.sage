@@ -16,8 +16,8 @@ class ElGamal:
     def encrypt(self, m):
         """Encrypt message m with random r."""
         r = IntegerModRing(self.q).random_element()
-        c1 = self.g ** r
-        c2 = m * (self.pk ** r)
+        c1 = m * (self.pk ** r)
+        c2 = self.g ** r
         return (c1, c2)
 
     def decrypt(self, ciphertext):

@@ -15,12 +15,13 @@ class Shuffle:
         reencrypted_list = []
         random_list = []
         for c in entry_list:
-            r = ZZ.random_element(self.q)
+            r = IntegerModRing(self.q).random_element()
+            # r = IntegerModRing(self.q)(0)
             a = c[0]*pk**r
             b = c[1]*self.g**r
             reencrypted_list.append((a, b))
             random_list.append(r)
-            reencrypted_list.append(c)
+        print(f"Reencrypted list: {reencrypted_list}")
         shuffled_list = [reencrypted_list[i] for i in phi]
         return (shuffled_list, random_list, phi)
 
@@ -44,7 +45,7 @@ class Shuffle:
             u_list.append(challenge)
         u_prime_list = [u_list[i] for i in phi]
 
-        (c_hat_list, r_hat_list) = self.genCommitmentChain(c_list[0], u_prime_list)
+        (c_hat_list, r_hat_list) = self.genCommitmentChain(self.h_list[0], u_prime_list)
     
         r_bar = sum(r_list) % self.q
 
@@ -77,7 +78,7 @@ class Shuffle:
         t3_0 = ((self.pk ** w_list[3]).inverse() * prod(out_list[i][0] ** w_prime_list[i] for i in range(N))) % self.p
         t3_1 = ((self.g ** w_list[3]).inverse() * prod(out_list[i][1] ** w_prime_list[i] for i in range(N))) % self.p
 
-        c_hat_0 = c_list[0]
+        c_hat_0 = self.h_list[0]
         t_hat_list = []
         for i in range(N):
             if i == 0:
@@ -108,7 +109,11 @@ class Shuffle:
         s = (s0, s1, s2, s3, s_hat_list, s_prime_list)
         proof = (t, s, c_list, c_hat_list)
 
-        return proof
+        dbg = {}
+        dbg['r_prime'] = r_prime
+        dbg['u_prime_list'] = u_prime_list
+        dbg['r_prime_list'] = r_prime_list
+        return proof, dbg
 
     def genCommitment(self, phi):
         r_list = np.empty(len(phi), dtype=object)
