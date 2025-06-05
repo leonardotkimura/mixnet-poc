@@ -51,7 +51,6 @@ for i in range(1, N+1):  # start from 1 to N
 print(f"Plaintext: {plaintext_list}")
 print(f"Encrypted: {ciphertext_list_1}")
 
-
 print(bcolors.OKGREEN + "\n2) Shuffling the ciphertexts and generating the proofs..." + bcolors.ENDC)
 shuffle = Shuffle(group, p, q, g, h_list, elgamal.pk)
 (ciphertext_list_2, random_list, phi) = shuffle.genShuffle(ciphertext_list_1, elgamal.pk)
@@ -60,14 +59,18 @@ proof = shuffle.genProof(ciphertext_list_1, ciphertext_list_2, random_list, phi)
 print(f"Ciphertext after shuffling: {ciphertext_list_2}")
 print(f"Proof: {proof}")
 
-print(bcolors.OKGREEN + "\n3) Decrypting the ciphertexts..." + bcolors.ENDC)
+
+print(bcolors.OKGREEN + "\n3) Verifying the proof..." + bcolors.ENDC)
+verifier = Verifier(p, q, g, h_list)
+result= verifier.verifyProof(proof, ciphertext_list_1, ciphertext_list_2, elgamal.pk)
+print(f"Verification result: {result}")
+
+
+print(bcolors.OKGREEN + "\n4) Decrypting the ciphertexts..." + bcolors.ENDC)
 decrypted_list = []
 for c in ciphertext_list_2:
     decrypted = elgamal.decrypt(c)
     decrypted_list.append(decrypted)
 print(f"Decrypted: {decrypted_list}")
 
-print(bcolors.OKGREEN + "\n4) Verifying the proof..." + bcolors.ENDC)
-verifier = Verifier(p, q, g, h_list)
-result= verifier.verifyProof(proof, ciphertext_list_1, ciphertext_list_2, elgamal.pk)
-print(f"Verification result: {result}")
+
