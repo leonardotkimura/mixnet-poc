@@ -20,7 +20,7 @@ class ElGamal:
 
     def decrypt(self, ciphertext):
         c1, c2 = ciphertext
-        return c2 / (c1 ** self.sk)  # Assuming sk is the secret key of the group
+        return c1 / (c2 ** self.sk)  # Assuming sk is the secret key of the group
     
     @staticmethod
     def multiply_ciphertexts(c, d):

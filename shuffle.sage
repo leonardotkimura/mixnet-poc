@@ -11,6 +11,10 @@ class Shuffle:
         self.pk = pk
     
     def genShuffle(self, entry_list, pk):
+        # # Simulate malicious behavior by modifying the last element of the entry list
+        # entry_list = entry_list.copy()
+        # entry_list[-1] = entry_list[0]  
+
         phi = Shuffle.genPermutation(len(entry_list))
         reencrypted_list = []
         random_list = []
@@ -22,7 +26,6 @@ class Shuffle:
             random_list.append(r)
         shuffled_list = [reencrypted_list[i] for i in phi]
         return (shuffled_list, random_list, phi)
-
     
     @staticmethod
     def genPermutation(n):

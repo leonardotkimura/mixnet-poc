@@ -47,13 +47,19 @@ class Verifier:
             t_hat_prime = ((c_hat_list[i] ** challenge).inverse() * (self.g ** s_hat_list[i]) * (prev_c_hat ** s_prime_list[i])) % self.p
             t_hat_prime_list.append(t_hat_prime)
         
-        assert t[0] == t_prime_0, "t[0] does not match t_prime_0"
-        assert t[1] == t_prime_1, "t[1] does not match t_prime_1"
-        assert t[2] == t_prime_2, "t[2] does not match t_prime_2"
-        assert t[3][0] == t_prime_3_0, f"t[3][0] does not match t_prime_3_0: {t[3][0]} != {t_prime_3_0}"
-        assert t[3][1] == t_prime_3_1, f"t[3][1] does not match t_prime_3_1: {t[3][1]} != {t_prime_3_1}"
-        t_hat_list = t[4]
+
+        # Check if the proof is valid
+        if any([
+            t[0] != t_prime_0,
+            t[1] != t_prime_1,
+            t[2] != t_prime_2,
+            t[3][0] != t_prime_3_0,
+            t[3][1] != t_prime_3_1
+        ]):
+            return False
+        
         for i in range(N):
-            assert t_hat_list[i] == t_hat_prime_list[i], f"t[4][{i}] does not match t_hat_prime_list[{i}]"
-    
-        return True
+            if t[4][i] != t_hat_prime_list[i]:
+                return False
+        
+        return True 
